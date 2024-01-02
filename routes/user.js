@@ -1,10 +1,20 @@
 const express = require('express');
 const { authenticateJwt, SECRET } = require("../middleware/auth");
 const { User, Course, Admin } = require("../db");
+const { z } = require('zod'); // Import Zod
 const router = express.Router();
 
-  router.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
+
+  // Zod schema for signup input validation
+const signupSchema = z.object({
+  username: z.string().min(3).max(20),
+  password: z.string().min(6),
+});
+
+router.post('/signup', async (req, res) => {
+  try {
+    const { username, password } = signupSchema.parse(req.body);
+
     const user = await User.findOne({ username });
     if (user) {
       res.status(403).json({ message: 'User already exists' });
@@ -14,10 +24,21 @@ const router = express.Router();
       const token = jwt.sign({ username, role: 'user' }, SECRET, { expiresIn: '1h' });
       res.json({ message: 'User created successfully', token });
     }
-  });
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid input', error: error.errors });
+  }
+});
   
-  router.post('/login', async (req, res) => {
-    const { username, password } = req.headers;
+  // Zod schema for login input validation
+const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+
+router.post('/login', async (req, res) => {
+  try {
+    const { username, password } = loginSchema.parse(req.body);
+
     const user = await User.findOne({ username, password });
     if (user) {
       const token = jwt.sign({ username, role: 'user' }, SECRET, { expiresIn: '1h' });
@@ -25,7 +46,10 @@ const router = express.Router();
     } else {
       res.status(403).json({ message: 'Invalid username or password' });
     }
-  });
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid input', error: error.errors });
+  }
+});
   
   router.get('/courses', authenticateJwt, async (req, res) => {
     const courses = await Course.find({published: true});
