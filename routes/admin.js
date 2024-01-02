@@ -34,8 +34,8 @@ router.post('/signup',async (req,res) => {
 })
 
 router.post('/login',async (req,res)=>{
-    const {username,password}= req.headers;
-    const admin = await Admins.findOne({username,password})
+    const {username,password}= req.body;
+    const admin = await Admin.findOne({username,password})
     if(admin){
         const token = jwt.sign({username,role:'admin'},SECRET,{expiresIn: '1h'})
         res.json({message: "logged in successfully",token})

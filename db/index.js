@@ -23,7 +23,7 @@ const User = mongoose.model('User',userSchema)
 const Admin = mongoose.model('Admin',adminSchema)
 const Course = mongoose.model('Course',courseSchema)
 
-modules.exports = {
+module.exports = {
     User,
     Admin,
     Course 
