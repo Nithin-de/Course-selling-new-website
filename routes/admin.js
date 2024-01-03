@@ -4,7 +4,7 @@ const { User, Course, Admin } = require('../db');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../middleware/auth');
 const { authenticateJwt } = require("../middleware/auth");
-const { z } = require('zod'); // Import Zod
+const { z } = require('zod'); 
 
 const router = express.Router();
 

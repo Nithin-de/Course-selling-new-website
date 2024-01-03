@@ -1,0 +1,7 @@
+# Ignore package lock and npm files
+package-lock.json
+package.json
+
+# Ignore generated files and directories
+node_modules/
+tsconfig.json

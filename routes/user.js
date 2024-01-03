@@ -1,7 +1,7 @@
 const express = require('express');
 const { authenticateJwt, SECRET } = require("../middleware/auth");
 const { User, Course, Admin } = require("../db");
-const { z } = require('zod'); // Import Zod
+const { z } = require('zod'); 
 const router = express.Router();
 
 
